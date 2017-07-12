@@ -71,7 +71,7 @@ app.get('/api/v1/artists', (req, res) => {
   database('songs')
     .where(database.raw('lower("artist_name")'), artistName.toLowerCase())
   .then((artistSongs) => {
-    if(!artistSongs) {
+    if(!artistSongs.length) {
       res.status(404).send({
         error: 'That artist doesn\'t seem to be here'
       })
@@ -106,7 +106,7 @@ app.get('/api/v1/songs', (req, res) => {
   database('songs')
     .where(database.raw('lower("title")'), songTitle.toLowerCase())
   .then((singleSong) => {
-    if(!singleSong) {
+    if(!singleSong.length) {
       res.status(404).send({
         error: 'That song doesn\'t seem to be here'
       })
@@ -149,7 +149,7 @@ app.post('/api/v1/artists/add', (req, res) => {
 
 app.post('/api/v1/songs/add', (req, res) => {
   const { title, artist_name } = req.body
-  let checkForArtist = ''
+
   for(let requiredParameter of ['title', 'artist_name']) {
     if(!req.body[requiredParameter]){
       res.status(422).send({
@@ -192,6 +192,48 @@ app.post('/api/v1/songs/add', (req, res) => {
   .catch(() => {
     res.status(500)
   })
+})
+
+app.delete('/api/v1/artists/delete/', (req, res) => {
+  const name = req.query.name
+
+  database('artists').where('name', name)
+  .then((singleArtist) => {
+  if(!singleArtist.length) {
+    res.status(404).send({
+      error: `${name} not found in artist database`
+    })
+  }
+    database('artists').where('id', singleArtist[0].id).del()
+  })
+  database('songs').where('artist_name', name)
+  .then((artistSongs) => {
+    artistSongs.forEach(song => {
+      database('songs').where('id', song.id).del()
+    })
+  })
+  .then(() => {
+    res.status(200).send({
+      result: `Artist entitled ${name} and all songs associated have been deleted from database`
+    })
+  })
+  .catch(() => {
+    res.status(500)
+  })
+})
+
+app.delete('/api/v1/songs/delete/', (req, res) => {
+  const title = req.query.title
+
+  database('songs').where('title', title).del()
+  .then(() => {
+      res.status(200).send({
+        result: `Song entitled ${title} has been deleted from database`
+      })
+    })
+    .catch(() => {
+      res.status(500)
+    })
 })
 
 app.listen(app.get('port'), () => {
