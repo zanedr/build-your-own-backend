@@ -66,17 +66,17 @@ app.get('/api/v1/artists/id/:id', (req, res) => {
 })
 
 app.get('/api/v1/artists', (req, res) => {
-  const artistName = req.query.name
+  const artistName = req.query.search
   console.log(req.query);
-  database('artists')
-    .where(database.raw('lower("name")'), artistName.toLowerCase())
-  .then((singleArtist) => {
-    if(!singleArtist) {
+  database('songs')
+    .where(database.raw('lower("artist_name")'), artistName.toLowerCase())
+  .then((artistSongs) => {
+    if(!artistSongs) {
       res.status(404).send({
         error: 'That artist doesn\'t seem to be here'
       })
     } else {
-      res.status(201).json(singleArtist)
+      res.status(201).json(artistSongs)
     }
   })
   .catch(() => {
@@ -102,7 +102,7 @@ app.get('/api/v1/songs/id/:id', (req, res) => {
 })
 
 app.get('/api/v1/songs', (req, res) => {
-  const songTitle = req.query.title
+  const songTitle = req.query.search
   database('songs')
     .where(database.raw('lower("title")'), songTitle.toLowerCase())
   .then((singleSong) => {
@@ -119,17 +119,27 @@ app.get('/api/v1/songs', (req, res) => {
   })
 })
 
-app.post('/api/v1/artists', (req, res) => {
-  const {artistName} = req.body
+app.post('/api/v1/artists/add', (req, res) => {
+  if(!req.body.name){
+    res.status(422).send({
+      error: 'Something was wrong with the data sent.'
+    })
+  }
+  const name = req.body.name
   database('artists')
-    .where(database.raw('lower("name")'), artistName.toLowerCase())
+    .where(database.raw('lower("name")'), name.toLowerCase())
   .then((singleArtist) => {
-    if(!singleArtist) {
-      res.status(404).send({
-        error: 'That artist doesn\'t seem to be here'
+    if(singleArtist[0]) {
+      res.status(422).send({
+        error: 'Artist is already in database'
       })
     } else {
-      res.status(201).json(singleArtist)
+      database('artists').insert({ name: name}, 'id')
+      .then((newArtist) => {
+        res.status(201).send({
+          status: `Artist ${name} added to database`
+        })
+      })
     }
   })
   .catch(() => {
@@ -137,20 +147,48 @@ app.post('/api/v1/artists', (req, res) => {
   })
 })
 
-app.post('/api/v1/songs', (req, res) => {
-  const {songTitle} = req.body
-  console.log('songTitle', songTitle);
-  database('songs')
-    .where(database.raw('lower("title")'), songTitle.toLowerCase())
-  .then((singleSong) => {
-    if(!singleSong) {
-      res.status(404).send({
-        error: 'That song doesn\'t seem to be here'
+app.post('/api/v1/songs/add', (req, res) => {
+  const { title, artist_name } = req.body
+  let checkForArtist = ''
+  for(let requiredParameter of ['title', 'artist_name']) {
+    if(!req.body[requiredParameter]){
+      res.status(422).send({
+        error: 'Something was wrong with the data sent.'
       })
-    } else {
-      res.status(201).json(singleSong)
     }
-  })
+  }
+  database('artists')
+    .where(database.raw('lower("name")'), artist_name.toLowerCase())
+    .then((artistFound) => {
+      if(!artistFound[0]) {
+        res.status(422).send({
+          error: 'Artist not found, please create artist before attributing songs.'
+        })
+      }
+      else {
+        database('songs')
+          .where(database.raw('lower("title")'), title.toLowerCase())
+        .then((singleSong) => {
+          if(artistFound[0] && singleSong[0]) {
+            res.status(422).send({
+              error: 'Song is already in the database under that artist'
+            })
+          }
+          else {
+            database('songs').insert({title: title,
+                                      artist_name: artist_name,
+                                      artist_id: artistFound[0].id},
+                                      'id')
+            .then((newArtist) => {
+              res.status(201).send({
+                status: `Song ${title} added to database under ${artistFound[0].name}`
+              })
+            })
+          }
+        })
+      }
+    })
+
   .catch(() => {
     res.status(500)
   })
