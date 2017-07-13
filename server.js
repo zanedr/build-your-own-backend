@@ -67,7 +67,6 @@ app.get('/api/v1/artists/id/:id', (req, res) => {
 
 app.get('/api/v1/artists', (req, res) => {
   const artistName = req.query.search
-  console.log(req.query);
   database('songs')
     .where(database.raw('lower("artist_name")'), artistName.toLowerCase())
   .then((artistSongs) => {
@@ -192,6 +191,93 @@ app.post('/api/v1/songs/add', (req, res) => {
   .catch(() => {
     res.status(500)
   })
+})
+
+app.patch('/api/v1/artists/edit/', (req, res) => {
+  const { newName, originalName } = req.body
+  if(!originalName || !newName) {
+    res.status(400).send({
+      error: 'One of the necessary input fields in missing. Make sure both "originalName" and "newName" are present and defined.'
+    })
+  }
+  database('artists').where('name', originalName)
+  .then((singleArtist) => {
+    if(!singleArtist.length) {
+      res.status(404).send({
+        error: 'Can\'t find that band in the database'
+      })
+    } else {
+      database('artists').where('id', singleArtist[0].id)
+      .update('name', newName)
+      .then(() => {
+        res.status(201).send({
+          success: `Artist ${originalName} has been renamed to ${newName}`
+        })
+      })
+    }
+  })
+  .catch(() => {
+    res.status(500)
+  })
+})
+
+app.patch('/api/v1/songs/edit/', (req, res) => {
+  const { newTitle, originalTitle, originalArtist_name, newArtist_name } = req.body
+  if(!originalTitle) {
+    res.status(400).send({
+      error: 'Please include "originalTitle" property for reference.'
+    })
+  } else if(!newTitle && !newArtist_name) {
+    res.status(400).send({
+      error: 'No updated information provided. Please include either "newTitle" or "newArtist_name".'
+    })
+  } else if(originalArtist_name && originalTitle && !newArtist_name) {
+    database('songs').where('title', originalTitle).where('artist_name', originalArtist_name)
+    .update('title', newTitle)
+    .then((singleSong) => {
+      res.status(201).send({
+        success: `Song ${originalTitle} has been renamed to ${newTitle}`
+      })
+      .catch(() => {
+        res.status(500)
+      })
+    })
+  } else if(!originalArtist_name && originalTitle) {
+    database('songs').where('title', originalTitle)
+    .then((singleArtist) => {
+      if(!singleArtist.length) {
+        res.status(404).send({
+          error: 'Can\'t find that song in the database'
+        })
+      } else if(singleArtist.length > 1) {
+        res.status(400).send({
+          error: 'Multiple songs found with that title. Please include "originalArtist_name" with the request.'
+        })
+      } else {
+        database('songs').where('id', singleArtist[0].title)
+        .update('title', newTitle)
+        .then(() => {
+          res.status(201).send({
+            success: `Song ${originalTitle} has been renamed to ${newTitle}`
+          })
+        })
+        .catch(() => {
+          res.status(500)
+        })
+      }
+    })
+  } else {
+    database('songs').where('title', originalTitle).where('artist_name', originalArtist_name)
+    .update('title', newTitle).update('artist_name', newArtist_name)
+    .then(() => {
+      res.status(201).send({
+        success: `Song ${originalTitle} by ${originalArtist_name} has been changed to ${newTitle} by ${newArtist_name}`
+      })
+    })
+    .catch(() => {
+      res.status(500)
+    })
+  }
 })
 
 app.delete('/api/v1/artists/delete/', (req, res) => {
