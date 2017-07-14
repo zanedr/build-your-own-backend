@@ -1,7 +1,7 @@
 module.exports = {
   production: {
     client: 'pg',
-    connection: 'postgres://localhost/library',
+    connection: process.env.DATABASE_URL + `?ssl=true`,
     migrations: {
       directory: './db/migrations'
     },
@@ -12,7 +12,7 @@ module.exports = {
   },
   testing: {
     client: 'pg',
-    connection: 'postgres://localhost/testing',
+    connection: process.env.DATABASE_URL + `?ssl=true`,
     migrations: {
       directory: './db/migrations'
     },
