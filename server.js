@@ -1,13 +1,13 @@
 
 const environment = process.env.NODE_ENV || 'testing';
-const configuration = require('./knexfile')[environment];
-const database = require('knex')(configuration);
+const process.envuration = require('./knexfile')[environment];
+const database = require('knex')(process.envuration);
 
 const express = require('express');
 
 const app = express();
 const jwt = require('jsonwebtoken');
-const config = require('dotenv').config().parsed;
+const process.env = require('dotenv').process.env().parsed;
 const bodyParser = require('body-parser');
 
 app.set('port', process.env.PORT || 3000);
@@ -57,7 +57,7 @@ const checkAuth = (request, response, next) => {
 app.post('/authenticate', (request, response) => {
   const user = request.body;
 
-  if (user.username !== config.USERNAME || user.password !== config.PASSWORD) {
+  if (user.username !== process.env.USERNAME || user.password !== process.env.PASSWORD) {
     response.status(403).send({
       success: false,
       message: 'Invalid Credentials'
