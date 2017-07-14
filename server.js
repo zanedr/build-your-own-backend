@@ -26,7 +26,7 @@ if (process.env.NODE_ENV === 'production' && (!process.env.CLIENT_SECRET || !pro
   throw new Error('Either CLIENT_SECRET, USERNAME, or PASSWORD is missing from .env file');
 }
 
-app.set('secretKey', process.env.CLIENT_SECRET;
+app.set('secretKey', process.env.CLIENT_SECRET);
 const token = jwt.sign('token', app.get('secretKey'));
 
 const checkAuth = (request, response, next) => {
