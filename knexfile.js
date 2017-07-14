@@ -1,7 +1,7 @@
 // Update with your config settings.
 
 module.exports = {
-  development: {
+  production: {
     client: 'pg',
     connection: 'postgres://localhost/library',
     migrations: {
