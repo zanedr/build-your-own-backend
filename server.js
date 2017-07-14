@@ -21,7 +21,7 @@ app.get('/', (request, response) => {
   response.sendFile(__dirname + '/public/index.html')
 })
 
-if (process.env.NODE_ENV === 'development' && (!config.CLIENT_SECRET || !config.USERNAME || !config.PASSWORD)) {
+if (process.env.NODE_ENV === 'production' && (!config.CLIENT_SECRET || !config.USERNAME || !config.PASSWORD)) {
   throw new Error('Either CLIENT_SECRET, USERNAME, or PASSWORD is missing from .env file');
 }
 
