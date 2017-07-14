@@ -20,3 +20,4 @@
 #### DELETE methods
 * **/api/v1/artists/delete/?name=** *band name* - deletes artist and all songs by that artist from the database. Capitalization doesn't matter.
 * **/api/v1/songs/delete/?title=** *song title* - deletes individual song from database. Capitalization doesn't matter.
+
