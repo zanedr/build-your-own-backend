@@ -1,5 +1,5 @@
-// const environment = process.env.NODE_ENV || 'development';
-const environment = process.env.NODE_ENV || 'development';
+// const environment = process.env.NODE_ENV || 'production';
+const environment = process.env.NODE_ENV || 'production';
 const configuration = require('./knexfile')[environment];
 const database = require('knex')(configuration);
 
