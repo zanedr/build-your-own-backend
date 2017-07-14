@@ -1,5 +1,5 @@
-const artistData = require('../../../data/artistData');
-const songData = require('../../../data/songData');
+const artistData = require('../../../data/testArtistData');
+const songData = require('../../../data/testSongData');
 
 
 exports.seed = function(knex, Promise) {
