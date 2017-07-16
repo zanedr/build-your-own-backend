@@ -7,7 +7,7 @@ const express = require('express');
 
 const app = express();
 const jwt = require('jsonwebtoken');
-const config = require('dotenv').config().parsed;
+const config = require('dotenv').config();
 const bodyParser = require('body-parser');
 
 app.set('port', process.env.PORT || 3000);
