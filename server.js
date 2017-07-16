@@ -20,7 +20,8 @@ app.get('/', (request, response) => {
   response.sendFile(`${__dirname}/public/index.html`);
 });
 
-if (process.env.NODE_ENV === 'production' && (!process.env.CLIENT_SECRET || !process.env.USERNAME || !process.env.PASSWORD)) {
+if (process.env.NODE_ENV && (!process.env.CLIENT_SECRET ||
+      !process.env.USERNAME || !process.env.PASSWORD)) {
   throw new Error('Either CLIENT_SECRET, USERNAME, or PASSWORD is missing from .env file');
 }
 
