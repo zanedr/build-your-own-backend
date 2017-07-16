@@ -3,10 +3,7 @@ const chai = require('chai');
 const should = chai.should();
 const chaiHttp = require('chai-http');
 const server = require('../server.js');
-
-const environment = process.env.NODE_ENV || 'production';
-const configuration = require('../knexfile')[environment];
-const database = require('knex')(configuration);
+const database = require('../db/knex.js');
 
 const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhc3N3b3JkIiwicGFzc3dvcmQiOiJwYXNzd29yZCIsImlhdCI6MTQ5OTk4NjA5OSwiZXhwIjoxNTAxNzE0MDk5fQ.qEAKVrXfIdeEg6Zh5lIkBORfIHmaGRImxccGF1HHDP4';
 
