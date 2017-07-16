@@ -1,12 +1,11 @@
 const environment = process.env.NODE_ENV || 'production';
-const configuration = require('./knexfile.js')[environment];
-const database = require('knex')(configuration);
+const config = require('./knexfile.js')[environment];
+const database = require('knex')(config);
 
 const express = require('express');
 
 const app = express();
 const jwt = require('jsonwebtoken');
-const config = require('dotenv').config();
 const bodyParser = require('body-parser');
 
 app.set('port', process.env.PORT || 3000);
