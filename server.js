@@ -39,7 +39,7 @@ const checkAuth = (request, response, next) => {
       if (error) {
         return response.status(403).send({
           success: false,
-          message: 'Invalid authorization token.'
+          message: 'Invalid authorization token.',
         });
       } else {
         request.decoded = decoded;
@@ -60,7 +60,7 @@ app.post('/authenticate', (request, response) => {
   if (user.username !== process.env.USERNAME || user.password !== process.env.PASSWORD) {
     response.status(403).send({
       success: false,
-      message: 'Invalid Credentials'
+      message: 'Invalid Credentials',
     });
   } else {
     const token = jwt.sign(user, app.get('secretKey'), {
@@ -70,7 +70,7 @@ app.post('/authenticate', (request, response) => {
     response.json({
       success: true,
       username: user.username,
-      token: token
+      token,
     });
   }
 });
@@ -81,7 +81,7 @@ app.get('/api/v1/artists/all', (req, res) => {
   .then((artists) => {
     if (!artists) {
       return res.status(404).send({
-        error: 'No artists were found'
+        error: 'No artists were found',
       });
     } else {
       return res.status(200).json(artists);
@@ -97,7 +97,7 @@ app.get('/api/v1/songs/all', (req, res) => {
   .then((songs) => {
     if (!songs) {
       return res.status(404).send({
-        error: 'No songs were found'
+        error: 'No songs were found',
       });
     } else {
       return res.status(200).json(songs);
@@ -115,7 +115,7 @@ app.get('/api/v1/artists/id/:id', (req, res) => {
   .then((singleArtist) => {
     if (!singleArtist) {
       return res.status(404).send({
-        error: 'That artist doesn\'t seem to be here'
+        error: 'That artist doesn\'t seem to be here',
       });
     } else {
       return res.status(200).json(singleArtist);
@@ -134,7 +134,7 @@ app.get('/api/v1/artists', (req, res) => {
   .then((artistSongs) => {
     if (!artistSongs.length) {
       return res.status(404).send({
-        error: 'That artist doesn\'t seem to be here'
+        error: 'That artist doesn\'t seem to be here',
       });
     } else {
       return res.status(201).json(artistSongs);
@@ -152,7 +152,7 @@ app.get('/api/v1/songs/id/:id', (req, res) => {
   .then((singleSong) => {
     if (!singleSong) {
       return res.status(404).send({
-        error: 'That song doesn\'t seem to be here'
+        error: 'That song doesn\'t seem to be here',
       });
     } else {
       return res.status(201).json(singleSong);
@@ -171,7 +171,7 @@ app.get('/api/v1/songs', (req, res) => {
   .then((singleSong) => {
     if (!singleSong.length) {
       return res.status(404).send({
-        error: 'That song doesn\'t seem to be here'
+        error: 'That song doesn\'t seem to be here',
       });
     } else {
       return res.status(201).json(singleSong);
@@ -186,7 +186,7 @@ app.get('/api/v1/songs', (req, res) => {
 app.post('/api/v1/artists/add', checkAuth, (req, res) => {
   if (!req.body.name) {
     return res.status(422).send({
-      error: 'Something was wrong with the data sent.'
+      error: 'Something was wrong with the data sent.',
     });
   }
   const name = req.body.name;
@@ -195,13 +195,13 @@ app.post('/api/v1/artists/add', checkAuth, (req, res) => {
   .then((singleArtist) => {
     if (singleArtist[0]) {
       return res.status(422).send({
-        error: 'Artist is already in database'
+        error: 'Artist is already in database',
       });
     } else {
-      database('artists').insert({ name: name }, 'id')
+      database('artists').insert({ name }, 'id')
       .then(() => {
         return res.status(201).send({
-          success: `Artist ${name} added to database`
+          success: `Artist ${name} added to database`,
         });
       });
     }
@@ -218,7 +218,7 @@ app.post('/api/v1/songs/add', checkAuth, (req, res) => {
   for (let requiredParameter of ['title', 'artist_name']) {
     if (!req.body[requiredParameter]) {
       return res.status(422).send({
-        error: 'Something was wrong with the data sent.'
+        error: 'Something was wrong with the data sent.',
       });
     }
   }
@@ -227,7 +227,7 @@ app.post('/api/v1/songs/add', checkAuth, (req, res) => {
     .then((artistFound) => {
       if (!artistFound[0]) {
         return res.status(422).send({
-          error: 'Artist not found, please create artist before attributing songs.'
+          error: 'Artist not found, please create artist before attributing songs.',
         });
       } else {
         database('songs')
@@ -235,16 +235,16 @@ app.post('/api/v1/songs/add', checkAuth, (req, res) => {
         .then((singleSong) => {
           if (artistFound[0] && singleSong[0]) {
             return res.status(422).send({
-              error: 'Song is already in the database under that artist'
+              error: 'Song is already in the database under that artist',
             });
           } else {
-            database('songs').insert({ title: title,
-              artist_name: artist_name,
+            database('songs').insert({ title,
+              artist_name,
               artist_id: artistFound[0].id },
               'id')
             .then((newArtist) => {
               return res.status(201).send({
-                success: `Song ${title} added to database under ${artistFound[0].name}`
+                success: `Song ${title} added to database under ${artistFound[0].name}`,
               });
             });
           }
@@ -262,21 +262,21 @@ app.patch('/api/v1/artists/edit/', checkAuth, (req, res) => {
   const { newName, originalName } = req.body;
   if (!originalName || !newName) {
     return res.status(400).send({
-      error: 'One of the necessary input fields in missing. Make sure both "originalName" and "newName" are present and defined.'
+      error: 'One of the necessary input fields in missing. Make sure both "originalName" and "newName" are present and defined.',
     });
   }
   database('artists').where('name', originalName)
   .then((singleArtist) => {
     if (!singleArtist.length) {
       return res.status(404).send({
-        error: 'Can\'t find that band in the database'
+        error: 'Can\'t find that band in the database',
       });
     } else {
       database('artists').where('id', singleArtist[0].id)
       .update('name', newName)
       .then(() => {
         return res.status(201).send({
-          success: `Artist ${originalName} has been renamed to ${newName}`
+          success: `Artist ${originalName} has been renamed to ${newName}`,
         });
       });
     }
@@ -291,11 +291,11 @@ app.patch('/api/v1/songs/edit/', checkAuth, (req, res) => {
   const { newTitle, originalTitle, originalArtist_name, newArtist_name } = req.body;
   if (!originalTitle) {
     return res.status(400).send({
-      error: 'Please include "originalTitle" property for reference.'
+      error: 'Please include "originalTitle" property for reference.',
     });
   } else if (!newTitle && !newArtist_name) {
     return res.status(400).send({
-      error: 'No updated information provided. Please include either "newTitle" or "newArtist_name".'
+      error: 'No updated information provided. Please include either "newTitle" or "newArtist_name".',
     });
   } else if (originalArtist_name && originalTitle && !newArtist_name) {
     database('songs')
@@ -304,7 +304,7 @@ app.patch('/api/v1/songs/edit/', checkAuth, (req, res) => {
     .update('title', newTitle)
     .then((singleSong) => {
       return res.status(201).send({
-        success: `Song ${originalTitle} has been renamed to ${newTitle}`
+        success: `Song ${originalTitle} has been renamed to ${newTitle}`,
       });
     });
   } else if (!originalArtist_name && originalTitle) {
@@ -312,18 +312,18 @@ app.patch('/api/v1/songs/edit/', checkAuth, (req, res) => {
     .then((singleArtist) => {
       if (!singleArtist.length) {
         return res.status(404).send({
-          error: 'Can\'t find that song in the database'
+          error: 'Can\'t find that song in the database',
         });
       } else if (singleArtist.length > 1) {
         return res.status(400).send({
-          error: 'Multiple songs found with that title. Please include "originalArtist_name" with the request.'
+          error: 'Multiple songs found with that title. Please include "originalArtist_name" with the request.',
         });
       } else {
         database('songs').where('id', singleArtist[0].title)
         .update('title', newTitle)
         .then(() => {
           return res.status(201).send({
-            success: `Song ${originalTitle} has been renamed to ${newTitle}`
+            success: `Song ${originalTitle} has been renamed to ${newTitle}`,
           });
         })
         .catch(() => {
@@ -336,7 +336,7 @@ app.patch('/api/v1/songs/edit/', checkAuth, (req, res) => {
     .then((originalArtist) => {
       if (!originalArtist.length) {
         return res.status(422).send({
-          error: 'Artist not found, please create artist before attributing songs.'
+          error: 'Artist not found, please create artist before attributing songs.',
         });
       } else {
         database('songs')
@@ -346,7 +346,7 @@ app.patch('/api/v1/songs/edit/', checkAuth, (req, res) => {
         .update('artist_name', newArtist_name)
         .then(() => {
           return res.status(201).send({
-            success: `Song ${originalTitle} by ${originalArtist_name} has been changed to ${newTitle} by ${newArtist_name}`
+            success: `Song ${originalTitle} by ${originalArtist_name} has been changed to ${newTitle} by ${newArtist_name}`,
           });
         })
         .catch(() => {
@@ -365,7 +365,7 @@ app.delete('/api/v1/artists/delete/', (req, res) => {
   .then((singleArtist) => {
     if (!singleArtist.length) {
       return res.status(404).send({
-        error: `${name} not found in artist database`
+        error: `${name} not found in artist database`,
       });
     }
     database('artists').where('id', singleArtist[0].id).del();
@@ -378,7 +378,7 @@ app.delete('/api/v1/artists/delete/', (req, res) => {
   })
   .then(() => {
     return res.status(204).send({
-      success: `Artist entitled ${name} and all songs associated have been deleted from database`
+      success: `Artist entitled ${name} and all songs associated have been deleted from database`,
     });
   })
   .catch(() => {
@@ -393,7 +393,7 @@ app.delete('/api/v1/songs/delete/', (req, res) => {
   database('songs').where('title', title).del()
   .then(() => {
     return res.status(204).send({
-      success: `Song entitled ${title} has been deleted from database`
+      success: `Song entitled ${title} has been deleted from database`,
     });
   })
     .catch(() => {

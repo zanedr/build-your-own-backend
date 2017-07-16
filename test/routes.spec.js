@@ -318,12 +318,8 @@ describe('API Routes', () => {
   it('DELETE: should allow a song to be deleted', (done) => {
     chai.request(server)
     .delete('/api/v1/songs/delete/?title=Going+To+California')
-    .set('Content-Type', 'application/json')
     .end((err, response) => {
       response.should.have.status(204);
-      response.should.be.json;
-      response.body.should.have.property('success');
-      response.body.success.should.equal('Song entitled Going To California has been deleted from database');
       done();
     });
   });
@@ -331,11 +327,8 @@ describe('API Routes', () => {
   it('DELETE: should allow artist to be deleted', (done) => {
     chai.request(server)
     .delete('/api/v1/artists/delete/?name=Pink+Floyd')
-    .set('Content-Type', 'application/json')
     .end((err, response) => {
       response.should.have.status(204);
-      response.body.should.have.property('success');
-      response.body.success.should.equal('Artist entitled Pink Floyd and all songs associated have been deleted from database');
       done();
     });
   });
