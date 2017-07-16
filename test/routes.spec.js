@@ -14,8 +14,8 @@ chai.use(chaiHttp);
 
 describe('API Routes', () => {
   before((done) => {
-    database.migrate.latest();
-    done();
+    database.migrate.latest()
+    .then(() => done());
   });
 
   beforeEach((done) => {
