@@ -1,5 +1,7 @@
 ### API use for build-your-own-backend
 
+[![CircleCI](https://circleci.com/gh/zanedr/build-your-own-backend.svg?style=svg)](https://circleci.com/gh/zanedr/build-your-own-backend)
+
 ####Data Source
 
 [five-thirty-eight classic rock](https://github.com/fivethirtyeight/data/tree/master/classic-rock)
