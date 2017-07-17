@@ -4,8 +4,8 @@ const should = chai.should();
 const chaiHttp = require('chai-http');
 const server = require('../server.js');
 
-process.env.NODE_ENV = 'testing';
-const environment = 'testing';
+process.env.NODE_ENV = 'test';
+const environment = 'test';
 const configuration = require('../knexfile')([environment]);
 const database = require('knex')(configuration);
 
