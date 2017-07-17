@@ -118,7 +118,7 @@ describe('API Routes', () => {
     });
   });
 
-  it.skip('POST: should allow an artist to be inserted into the database', (done) => {
+  it('POST: should allow an artist to be inserted into the database', (done) => {
     chai.request(server)
     .post('/api/v1/artists/add')
     .set('Authorization', authToken)
@@ -134,7 +134,7 @@ describe('API Routes', () => {
     });
   });
 
-  it.skip('POST: should not allow an artist to be inserted into the database if it already exists', (done) => {
+  it('POST: should not allow an artist to be inserted into the database if it already exists', (done) => {
     chai.request(server)
     .post('/api/v1/artists/add')
     .set('Authorization', authToken)
@@ -150,7 +150,7 @@ describe('API Routes', () => {
     });
   });
 
-  it.skip('POST: should not allow an artist to be inserted into the database correct data is not provided', (done) => {
+  it('POST: should not allow an artist to be inserted into the database correct data is not provided', (done) => {
     chai.request(server)
     .post('/api/v1/artists/add')
     .set('Authorization', authToken)
@@ -166,7 +166,7 @@ describe('API Routes', () => {
     });
   });
 
-  it.skip('POST: should allow a song to be inserted into the database', (done) => {
+  it('POST: should allow a song to be inserted into the database', (done) => {
     chai.request(server)
     .post('/api/v1/songs/add')
     .set('Authorization', authToken)
@@ -183,7 +183,7 @@ describe('API Routes', () => {
     });
   });
 
-  it.skip('POST: should not allow a song to be inserted into the database if it already exists', (done) => {
+  it('POST: should not allow a song to be inserted into the database if it already exists', (done) => {
     chai.request(server)
     .post('/api/v1/songs/add')
     .set('Authorization', authToken)
@@ -200,7 +200,7 @@ describe('API Routes', () => {
     });
   });
 
-  it.skip('POST: should not allow a song to be inserted into the database if correct data is not provided', (done) => {
+  it('POST: should not allow a song to be inserted into the database if correct data is not provided', (done) => {
     chai.request(server)
     .post('/api/v1/songs/add')
     .set('Authorization', authToken)
@@ -216,7 +216,7 @@ describe('API Routes', () => {
     });
   });
 
-  it.skip('PATCH: should allow an artist to be edited into the database', (done) => {
+  it('PATCH: should allow an artist to be edited into the database', (done) => {
     chai.request(server)
     .patch('/api/v1/artists/edit')
     .set('Authorization', authToken)
@@ -233,7 +233,7 @@ describe('API Routes', () => {
     });
   });
 
-  it.skip('PATCH: should not allow an artist to be edited into the database if band doesn\'t exist', (done) => {
+  it('PATCH: should not allow an artist to be edited into the database if band doesn\'t exist', (done) => {
     chai.request(server)
     .patch('/api/v1/artists/edit')
     .set('Authorization', authToken)
@@ -250,7 +250,7 @@ describe('API Routes', () => {
     });
   });
 
-  it.skip('PATCH: should not allow an artist to be edited if correct data is not provided', (done) => {
+  it('PATCH: should not allow an artist to be edited if correct data is not provided', (done) => {
     chai.request(server)
     .patch('/api/v1/artists/edit')
     .set('Authorization', authToken)
@@ -266,7 +266,7 @@ describe('API Routes', () => {
     });
   });
 
-  it.skip('PATCH: should allow a song to be edited into the database', (done) => {
+  it('PATCH: should allow a song to be edited into the database', (done) => {
     chai.request(server)
     .patch('/api/v1/songs/edit')
     .set('Authorization', authToken)
@@ -284,7 +284,7 @@ describe('API Routes', () => {
     });
   });
 
-  it.skip('PATCH: should not allow a song to be edited into the database if song doesn\'t exist', (done) => {
+  it('PATCH: should not allow a song to be edited into the database if song doesn\'t exist', (done) => {
     chai.request(server)
     .patch('/api/v1/songs/edit')
     .set('Authorization', authToken)
@@ -301,7 +301,7 @@ describe('API Routes', () => {
     });
   });
 
-  it.skip('PATCH: should not allow a song to be edited if correct data is not provided', (done) => {
+  it('PATCH: should not allow a song to be edited if correct data is not provided', (done) => {
     chai.request(server)
     .patch('/api/v1/artists/edit')
     .set('Authorization', authToken)

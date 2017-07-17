@@ -53,26 +53,26 @@ const checkAuth = (request, response, next) => {
   }
 };
 
-// app.post('/authenticate', (request, response) => {
-//   const user = request.body;
-//
-//   if (user.username !== process.env.USERNAME || user.password !== process.env.PASSWORD) {
-//     response.status(403).send({
-//       success: false,
-//       message: 'Invalid Credentials',
-//     });
-//   } else {
-//     const token = jwt.sign(user, app.get('secretKey'), {
-//       expiresIn: 1728000,
-//     });
-//
-//     response.json({
-//       success: true,
-//       username: user.username,
-//       token,
-//     });
-//   }
-// });
+app.post('/authenticate', (request, response) => {
+  const user = request.body;
+
+  if (user.username !== process.env.USERNAME || user.password !== process.env.PASSWORD) {
+    response.status(403).send({
+      success: false,
+      message: 'Invalid Credentials',
+    });
+  } else {
+    const token = jwt.sign(user, app.get('secretKey'), {
+      expiresIn: 21728000,
+    });
+
+    response.json({
+      success: true,
+      username: user.username,
+      token,
+    });
+  }
+});
 
 // return all artists
 app.get('/api/v1/artists/all', (req, res) => {

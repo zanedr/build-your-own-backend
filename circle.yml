@@ -11,4 +11,4 @@ deployment:
   production:
     branch: master
     heroku:
-      appname: build-your-own-backend-zaner
+      appname: guarded-temple-79046
